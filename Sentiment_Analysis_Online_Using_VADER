@@ -1,0 +1,74 @@
+import nltk
+nltk.download('punkt')
+import re
+import fitz
+import pandas as pd
+from nltk.tokenize import sent_tokenize
+import openpyxl
+from openpyxl import load_workbook
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import requests
+import os
+
+process = SentimentIntensityAnalyzer()
+pdf_url = input("Please enter URL of the file on which you want to perform sentiment analysis: ")
+response = requests.get(pdf_url)
+if response.status_code == 200:
+    pdf_content = response.content
+else:
+    print("Error! Invalid URL!")
+    exit()
+
+pdf_document = fitz.open(stream =pdf_content, filetype="pdf")
+array=[]
+compound = 0
+positive = 0
+negative = 0
+neutral = 0
+count = 0
+full_text = ""
+for page_num in range(len(pdf_document)):
+    pdf_page = pdf_document.load_page(page_num)
+    text = pdf_page.get_text()
+    sentences =sent_tokenize(text)
+    for sentence in (sentences):
+        sentiment_result = process.polarity_scores(sentence)
+        compound += sentiment_result['compound']
+        positive += sentiment_result['pos']
+        negative += sentiment_result['neg']
+        neutral += sentiment_result['neu']
+        count = count+1
+
+pdf_document.close()
+
+sentiment_result = process.polarity_scores(full_text)
+compound = compound/count
+positive = positive/count
+negative = negative/count
+neutral = neutral/count
+
+array.append({
+    "Compound": compound,
+    "Positive": positive,
+    "Negative": negative,
+    "Neutral": neutral,
+    "URL":pdf_url
+})
+
+file_path = r"C:\Users\admin\Desktop\AiTEC\Pdf_reader_python.xlsx"
+
+if os.path.exists(file_path):
+    workbook = load_workbook(file_path)
+    sheet = workbook.active
+    next_row = sheet.max_row + 1
+else:
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.append(["Compound", "Positive", "Negative","Neutral","URL"])
+    next_row = 2
+
+for record in array:
+    sheet.append([record["Compound"], record["Positive"], record["Negative"], record["Neutral"], record["URL"]])
+
+workbook.save(file_path)
