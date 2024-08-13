@@ -17,9 +17,7 @@ This project performs sentiment analysis on text extracted from PDF files. The s
     git clone https://github.com/Muhammad-Maaz-Habib/Sentiment_Analysis_Online.git
     ```
 2. Navigate to the project directory:
-    ```bash
-    cd sentiment-analysis-pdf
-    ```
+   
 3. Install the required dependencies:
     ```bash
     pip install nltk fitz pandas openpyxl vaderSentiment requests
@@ -29,9 +27,6 @@ This project performs sentiment analysis on text extracted from PDF files. The s
 1. Ensure you have the required Python packages installed (see [Installation](#installation)).
 
 2. Run the script:
-    ```bash
-    python sentiment_analysis.py
-    ```
 
 3. Enter the URL of the PDF file when prompted.
 
@@ -39,7 +34,7 @@ This project performs sentiment analysis on text extracted from PDF files. The s
 
 ## Configuration
 - **File Path**: The results are saved to `C:\Users\admin\Desktop\AiTEC\Pdf_reader_python.xlsx`. Modify the `file_path` variable in the script to change the location or filename.
-- **Sentiment Analysis**: The script uses VADER (Valence Aware Dictionary and sEntiment Reasoner) for sentiment analysis. Ensure you have the `vaderSentiment` library installed.
+- **Sentiment Analysis**: The script uses VADER (Valence Aware Dictionary and sentiment Reasoner) for sentiment analysis. Ensure you have the `vaderSentiment` library installed.
 
 ## Contributing
 Feel free to open issues or submit pull requests for improvements. Please ensure your contributions adhere to the project's coding standards and provide clear documentation for any changes.
